@@ -28,7 +28,7 @@ interface TodoList {
     created_at: string;
 }
 
-const props = defineProps<{
+const props=defineProps<{
     lists: TodoList[];
 }>();
 
