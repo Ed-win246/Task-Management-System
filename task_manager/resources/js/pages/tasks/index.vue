@@ -299,6 +299,17 @@ const getPriorityVariant= (priority:string): 'default'| 'secondary' | 'destructi
         </CardContent>
     </Card>
     <!--Table  -->
-    
+    <Card>
+        <CardHeader>
+            <CardTitle>Tasks( {{ tasks.data.length }}  of {{ tasks.total }} )</CardTitle>
+        </CardHeader>
+        <CardContent>
+            <div v-if="tasks.data.length >0" class="space-y-4">
+                <div class="rounded-md border">
+                    <table class="w-full caption-bottom text-sm"></table>
+                </div>
+            </div>
+        </CardContent>
+    </Card>
     </div>
 </template>
