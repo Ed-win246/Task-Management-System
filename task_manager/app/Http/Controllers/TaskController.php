@@ -62,9 +62,14 @@ class TaskController extends Controller
             'completed'=>'nullable|string|max:255',
         ]);
         $validated['completed']=(bool)($validated['completed']??$task->completed);
-        $validated['priority']=$validated['priority']>>$task->priority;
+        $validated['priority']=$validated['priority']??$task->priority;
 
         $task->update($validated);
+        return redirect()->back();
+    }
+
+    public function destroy(Task $task): RedirectResponse{
+        $task->delete();
         return redirect()->back();
     }
 }
