@@ -146,7 +146,7 @@ const deleteTask=(taskId:number)=>{
     }
 };
 
-const openEditDailog=(task: Task)=>{
+const openEditDailog =(task: Task)=>{
     editingTask.value={...task};
     editForm.title=task.title;
     editForm.description=task.description || '';
@@ -224,5 +224,81 @@ const getPriorityVariant= (priority:string): 'default'| 'secondary' | 'destructi
                 </DialogContent>
             </Dialog>
         </div>
+        <Dialog v-model:open="isEditDialogOpen">
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Edit Task</DialogTitle>
+                    <DialogDescription>Edit Task Detials.</DialogDescription>
+                </DialogHeader>
+                <form @submit.prevent="updateTask" class="space-y-4">
+                    <div class="space-y-2">
+                        <label for="title">Task Title</label>
+                        <Input id="title" v-model="editForm.title" required placeholder="Edit task Title"/>
+                        <InputError :message="editForm.errors?.title"/>
+                    </div>
+                    <div class="space-y-2">
+                        <label for="description">Description</label>
+                        <textarea id="description" v-model="editForm.description"
+                        placeholder="Edit description...."
+                        rows="3"
+                        class="flex min-h-[80px] rounded-md w-full border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring-2"/>
+                        <InputError :message="editForm.errors?.description"/>
+                    </div>
+                    <div class="space-y-2">
+                        <label for="priority">Priority</label>
+                        <select  id="priority" v-model="editForm.priority" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring-2">
+                            <option value="low">Low</option>
+                            <option value="normal">Normal</option>
+                            <option value="high">High</option>
+                        </select>
+                        <InputError :message="editForm.errors?.priority"/>
+                    </div>
+                    <Button type="submit" class="w-full" :disabled="editForm.processing">
+                        <Loader2 v-if="editForm.processing" class="h-4 w-4 mr-2 animate-spin">
+                        </Loader2>
+                        {{ editForm.processing? 'Updating..' :'Update Task'}}
+                    </Button>
+                </form>
+            </DialogContent>
+        </Dialog>
+    <Card>
+        <CardHeader>
+            <div class="flex items-center justify-between">
+                <CardTitle>Filters</CardTitle>
+                <Button variant="ghost" size="sm" @click="clearfilters">
+                    <x class=" mr-2">Clear Filters</x>
+                </Button>
+            </div>
+        </CardHeader>
+        <CardContent>
+            <div class="grid gap-4 md:grid-col-3">
+                <div class="spae-y-2">
+                    <label for="search">Search</label>
+                    <div class="relative">
+                        <search class="absolute left-2 top-2h-4 w-4 text-muted-foreground"/>
+                        <input id="search" placeholder="search tasks..." class="pl-8">
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <label for="list">List</label>
+                    <select  id="list" v-model="list_id" class="flex w-full h-10 rounded-md w-full border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring-2">
+                    <option value="">All Lists</option>
+                    <option v-for="list in lists" :key="list.id" value="list.id">{{ list.name }}</option>
+                    </select>
+                </div>
+                <div class="space-y-2">
+                    <label for="priority">Priority</label>
+                    <select  id="priority" v-model="list_id" class="flex w-full h-10 rounded-md w-full border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring-2">
+                        <option value="">All Priorities</option>
+                        <option value="low">Low</option>
+                        <option value="normal">Normal</option>
+                        <option value="high">High</option>
+                    </select>
+                </div>
+            </div>
+        </CardContent>
+    </Card>
+    <!--Table  -->
+    
     </div>
 </template>
