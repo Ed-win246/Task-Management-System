@@ -7,7 +7,6 @@ use App\Models\TodoList;
 use Inertia\Inertia;
 use Inertia\Response;
 use App\MOdels\Task;
-use Laravel\Mcp\Server\Annotations\Priority;
 
 class TaskController extends Controller
 {
@@ -38,5 +37,34 @@ class TaskController extends Controller
             'lists'=>$lists,
             'filters'=>$request->only(['search','priority','list_id']),
         ]);
+    }
+
+    public function store(Request $request): RedirectResponse{
+        $validated=$request->validate([
+            'title'=>'required|string|max:255',
+            'description'=>'required|string',
+            'priority'=>'nullable|string|max:255',
+            'completed'=>'nullable|boolean',
+            'list_id'=>'required|exists:lists,id',
+        ]);
+        $validated['completed']=(bool)($validated['completed']??false);
+        $validated['priority']=$validated['priority']??'normal';
+
+        Task::create($validated);
+        return redirect()->back();
+    }
+
+    public function update(Request $request , Task $task ): RedirectResponse{
+        $validated=$request->validate([
+            'title'=>'required|string|max:255',
+            'description'=>'required|string',
+            'priority'=>'nullable|string|max:255',
+            'completed'=>'nullable|string|max:255',
+        ]);
+        $validated['completed']=(bool)($validated['completed']??$task->completed);
+        $validated['priority']=$validated['priority']>>$task->priority;
+
+        $task->update($validated);
+        return redirect()->back();
     }
 }
