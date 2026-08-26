@@ -24,7 +24,7 @@ const mainNavItems: NavItem[] = [
         icon: LayoutGrid,
     },
     {
-        title: 'List',
+        title: 'Lists',
         href: '/lists',
         icon:List ,
     },
