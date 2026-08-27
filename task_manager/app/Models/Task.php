@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Task extends Model
 {
-    //
     use HasFactory;
+
     protected $fillable = [
         'list_id',
         'title',
@@ -18,11 +18,12 @@ class Task extends Model
         'completed'
     ];
 
-    protected $casts=[
-        'completed'=>'boolean',
+    protected $casts = [
+        'completed' => 'boolean',
     ];
 
-    public function todolist(): BelongsTo{
-        return $this->belongsTo(TodoList::class,'todolist_id');
+    public function list(): BelongsTo
+    {
+        return $this->belongsTo(TodoList::class, 'list_id');
     }
 }
